@@ -7,8 +7,6 @@
       <el-table-column prop="key" label="key"></el-table-column>
       <el-table-column prop="value" label="value"></el-table-column>
     </el-table>
-
-
   </div>
 </template>
 
