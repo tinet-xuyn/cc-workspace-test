@@ -88,24 +88,25 @@ export default class Home extends Vue {
 
   created() {
     const obj = this.$route.query
-    // 将对象转换为数组 并且匹配 kv 并且按照kv的顺序展示 如果未匹配则name为自定义 并且放在最后展示
-    for (const key in obj) {
-      // 判断 key 是否在 kv 中
-      const index = this.kv.findIndex((item: any) => item.key === key)
-      if (index !== -1) {
-        this.options[index] = {
-          key,
-          value: obj[key],
-          name: this.kv[index].name
-        }
-      }else {
+    // 将obj 与 kv 进行匹配 生成 options ,按照kv 的顺序进行排序,未匹配的放在最后
+    this.kv.forEach((item: any) => {
+      if (obj[item.key]) {
         this.options.push({
-          key,
-          value: obj[key],
-          name: '自定义'
-        })
+          name: item.name,
+          key: item.key,
+          value: obj[item.key]
+        });
       }
-    }
+    });
+    Object.keys(obj).forEach((key: any) => {
+      if (!this.options.find((item: any) => item.key === key)) {
+        this.options.push({
+          name: '自定义参数',
+          key,
+          value: obj[key]
+        });
+      }
+    });
   }
 }
 </script>
