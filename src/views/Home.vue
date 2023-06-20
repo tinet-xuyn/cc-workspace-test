@@ -13,11 +13,11 @@ export default class Home extends Vue {
  options: any = reactive([]);
 
   created() {
-    const searchParams: any = new URLSearchParams(location.search);
-    for(var key of searchParams.keys()) {
+    const obj = this.$route.query
+    for (const key in obj) {
       this.options.push({
         key,
-        value: searchParams.get(key)
+        value: obj[key]
       })
     }
   }
