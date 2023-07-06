@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import { Vue } from "vue-class-component";
 export default class Home extends Vue {
   options: any = reactive([]);
@@ -86,8 +86,21 @@ export default class Home extends Vue {
       name: "IVR流程名称",
     },
   ];
+  
+  mounted() {
+    this.$watch('$route', this.onRouteChanged);
+    this.init();
+  }
 
-  created() {
+  onRouteChanged(newRoute: any, oldRoute: any) {
+    // 在这里处理路由变化的逻辑
+    console.log('Route changed:', newRoute, oldRoute);
+    this.init();
+    // 处理逻辑...
+  }
+
+  init() {
+    this.options = [];
     const obj = this.$route.query;
     // 将对象转换为数组 并且匹配 kv 并且按照kv的顺序展示 如果未匹配则name为自定义 并且放在最后展示
     for (const key in obj) {
@@ -100,6 +113,7 @@ export default class Home extends Vue {
     }
     this.options = this.options.sort(this.compareFn);
   }
+
   compareFn(a: any, b: any) {
     let index1 = this.kv.findIndex((v: any) => v.name === a.name);
     let index2 = this.kv.findIndex((v: any) => v.name === b.name);
